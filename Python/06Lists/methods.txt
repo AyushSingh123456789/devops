@@ -1,0 +1,40 @@
+List values have an index() method that can be passed a value. If that value exists in the list, the method will return the index of the value. If the value isn’t in the list, then Python produces a ValueError error.
+When the list contains duplicates of the value, the method returns the index of its first appearance
+
+
+To add new values to a list, use the append() and insert() methods. The append() method adds the argument to the end of the list.
+ The insert() method can insert a value at any index in the list. The first argument to insert() is the index of the new value, and the second argument is the new value to be inserted.
+
+
+The remove() method accepts a value to remove from the list on which it’s called. Attempting to delete a value that doesn’t exist in the list will result in a ValueError error. If the value appears multiple times in the list, the method will remove only the first instance of it.
+
+The del statement is useful when you know the index of the value you want to remove from the list, while the remove() method is useful when you know the value itself.
+
+
+Note three things about the sort() method:
+
+First, it sorts the list in place; don’t try to capture the return value by writing code like spam = spam.sort()
+
+Second, you can’t sort lists that have both number values and string values in them, as Python doesn’t know how to compare these values.
+
+Third, sort() uses ASCIIbetical order rather than actual alphabetical order for sorting strings. This means uppercase letters come before lowercase letters, placing the lowercase a after the uppercase Z.
+
+If you need to sort the values in regular alphabetical order, pass str.lower for the key keyword argument in the sort() method call:
+
+>>> spam = ['a', 'z', 'A', 'Z']
+>>> spam.sort(key=str.lower)
+>>> spam
+['a', 'A', 'z', 'Z']
+
+
+If you need to quickly reverse the order of the items in a list, you can call the reverse() list method.
+
+Like the sort() list method, reverse() doesn’t return a list, which is why we write spam.reverse() instead of spam = spam.reverse().
+
+
+You can also split up a single instruction across multiple lines by ending each line with the line continuation character (\). Think of \ as saying, “This instruction continues on the next line.” The indentation on the line after a \ line continuation isn’t significant. For example, the following is valid Python code:
+
+print('Four score and seven ' + \
+      'years ago...')
+
+
