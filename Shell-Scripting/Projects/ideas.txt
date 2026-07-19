@@ -1,0 +1,20 @@
+Idea Number One: System-Info Script
+
+What it means: A custom script that fetches and displays the current state and health of your computer.
+What it does: Instead of opening multiple different commands (like checking free memory, CPU state, and disk space separately), this script runs them all in a single sequence and outputs a neat, readable summary for the user.
+How to write it:Utilize built-in command-line tools such as df (for disk usage), free (for RAM), and uptime.Use command substitution to capture the output of these terminal commands and store them inside local variables.Combine this with your echo statements to format a visually appealing layout (you can even add custom banners or spacer characters)
+
+Idea Number Two: Log Cleaner(Log Cleanup)
+
+What it means: An automated tool to purge old, unnecessary logs to free up storage space.What it does: Linux applications (like servers) constantly write activity records (logs) to text files, which continuously grow over time. This script automatically identifies log files that are older than a specific number of days and deletes or archives them so your disk doesn't fill up.
+How to write it:Use the find command, which is the most powerful tool for this purpose.Add specific flags to find to target only files and limit them by modification time (e.g., matching files older than 30 days).Use if statements to validate that the user input is an actual directory and that it is not empty before running the delete command.
+
+Idea Number Three: Backup Script
+
+What it means: An automated method to duplicate important files and folders.What it does: Instead of manually copying and pasting files every day, this script takes specific source files, packages and compresses them (often using built-in utilities like tar), and saves them to a designated backup destination (like an external drive or separate folder).
+How to write it:Start by declaring variables for your source folder and destination folder.Use the date command inside a command substitution $(date ...) so your script automatically appends the current date/time to the backup file names.Use if-else statements to check if the backup was successful or if the source folder even exists.If you want to dive deeper into automation, you can run this script automatically on a schedule using Linux Cron Jobs.
+
+General Tips for Your Projects
+
+Always start your scripts with the shebang (#!/bin/bash).Make your scripts interactive by prompting the user for input using the read command, or use command-line arguments (like $1, $2).
+Since you just learned about exception handling, ensure you use exit codes (e.g., exit 1 or exit 2) when a condition fails so the script safely terminates if it hits an error.
