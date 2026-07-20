@@ -1,0 +1,4 @@
+source/
+backups/
+*.log
+*.tar.gz
