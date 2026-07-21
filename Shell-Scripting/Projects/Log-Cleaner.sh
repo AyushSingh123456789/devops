@@ -2,28 +2,31 @@
 
 
 << Info
-This a Log Cleaner, which is used for cleaning .log files, which have been present on this system for more than 1 year.
+This a Log Cleaner, which will allow one to clean all the .log files which have been longer than a fixed number of days.
 Info
 
 set -euo pipefail
 
-LOG_DIR="./logs"
-LOG_GLOB="*.log"
-DAYS_OLD=30
+LOG_DIR="$HOME/DevOps/Shell-Scripting/Projects/logs"
+DAYS=30
 
-TARGET_DIR="$(cd "$LOG_DIR" 2>/dev/null && pwd || true)"
+# Code if the directory doesn't exist:
 
-if [[ -z "${TARGET_DIR}" || ! -d "${TARGET_DIR}" ]]; then
-	echo "ERROR: Target directory '$LOG_DIR' does not exist. Aborting."
+if [ ! -d "${LOG_DIR}" ]; then
+	echo "Error: Directory ${LOG_DIR} does not exist."
 	exit 1
 fi
 
-echo "Cleaning log files older than ${DAYS_OLD} days in: ${TARGET_DIR}"
+echo "Searching for .log files, older than ${DAYS} days in ${LOG_DIR}."
 
-echo #blank space line
+: << 'CodeBelow'
+ if empty(-z), the founded directory("$(find ${LOG_DIR})) which is not more than 1(-maxdepth 1), ending with .log extension(-name '*.log'), living for over 30 days(-mtime +${DAYS}), record it(-print), and quit to the next line of code(-quit)
+CodeBelow
 
-find "$TARGET_DIR" -type f -name "$LOG_GLOB" -mtime + "$DAYS_OLD" - 
-print -delete
-
-echo # blank space line
-echo "Done."
+if [ -z "$(find "${LOG_DIR}" -maxdepth 1 -name '*.log' -mtime +"${DAYS}" -print -quit)" ]; then
+	echo "No Log files older than ${DAYS} days in the ${LOG_DIR} directory"
+else
+	echo "Log file/s older than ${DAYS} days found, deleting it right now..."
+	find "${LOG_DIR}" -maxdepth 1 -name '*.log' -mtime +"${DAYS}" -exec rm -f "{}" +
+	echo "Cleanup Complete"
+fi
