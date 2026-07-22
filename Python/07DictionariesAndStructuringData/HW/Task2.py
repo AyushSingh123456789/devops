@@ -23,7 +23,8 @@ def display_inventory(inventory):
     print("Inventory:")
     item_total = 0
     for k, v in inventory.items():
-        # FILL THIS PART IN
+        print(v, k, end='\n')
+        item_total = item_total + v
     print("Total number of items: " + str(item_total))
 
 display_inventory(stuff)

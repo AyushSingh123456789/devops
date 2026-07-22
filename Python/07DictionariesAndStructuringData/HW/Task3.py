@@ -9,12 +9,18 @@
 
 
 def add_to_inventory(inventory, added_items):
-    # Your code goes here.
-
+    for item in added_items:
+       inventory[item] = inventory.get(item,0)+1
+    return inventory
 inv = {'gold coin': 42, 'rope': 1}
 dragon_loot = ['gold coin', 'dagger', 'gold coin', 'gold coin', 'ruby']
 inv = add_to_inventory(inv, dragon_loot)
-display_inventory(inv)
+print(inv)
+
+
+#inventory.get(item, 0) looks up the current item in the dictionary. If the item already exists, it returns its current count. If it does not exist yet, it safely returns 0 instead of crashing with a KeyError
+#+ 1 adds 1 to that count (either incrementing an existing item or turning the 0 into 1 for a brand-new item).
+#inventory[item] = ... assigns that new updated count back to the item key in the dictionary.
 
 
 # The previous program (with your display_inventory() function from the previous project) would output the following:
