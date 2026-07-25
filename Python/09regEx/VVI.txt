@@ -1,0 +1,24 @@
+Pattern building blocks
+Pattern	Meaning
+\d	digit
+\w	word char (letter/digit/_)
+\s	whitespace
+.	any char (except newline)
++	1 or more
+*	0 or more
+?	0 or 1 (optional)
+{n,m}	between n and m
+^ $	start / end of string (or line, with re.MULTILINE)
+[abc]	one of a, b, c
+[^abc]	none of a, b, c
+|	OR
+
+
+
+Gotchas that trip people up:
+
+1. Use raw strings: always r'...' for regex, so \d isn't interpreted as an escape sequence by Python itself.
+2. Greedy vs lazy: .* is greedy (grabs as much as possible); .*? is lazy (grabs as little as possible). Matters a lot when parsing things like <tag>...</tag>.
+3. Compile patterns you reuse: pattern = re.compile(r'...') then pattern.findall(text) — faster when scanning many lines/files.
+4. re.MULTILINE makes ^/$ match per-line instead of just start/end of the whole string — essential for scanning multi-line log files.
+5. re.DOTALL makes . match newlines too — useful for multi-line log entries (e.g. stack traces).
