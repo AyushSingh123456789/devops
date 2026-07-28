@@ -1,0 +1,78 @@
+class Library:
+    """Holds the collection of books and the borrowing records."""
+
+    def __init__(self):
+        self.books = [
+            "A Tale of Two Cities",
+            "The Little Prince",
+            "The Lord Of The Rings",
+            "The Alchemist",
+            "Bhagavad Gita",
+            "Scouting For Boys",
+        ]
+        # Tracks who currently has which book: {book_name: member_name}
+        self.borrowed = {}
+
+    def borrow_book(self, member_name, book_name):
+        if book_name not in self.books:
+            print(f"Sorry, '{book_name}' is not available in the library.\n")
+            return
+
+        self.books.remove(book_name)
+        self.borrowed[book_name] = member_name
+        print(f"'{book_name}' has been successfully borrowed by {member_name}.\n")
+
+    def return_book(self, member_name, book_name):
+        if self.borrowed.get(book_name) != member_name:
+            print(f"'{book_name}' was not recorded as borrowed by {member_name}.\n")
+            return
+
+        del self.borrowed[book_name]
+        self.books.append(book_name)
+        print(f"'{book_name}' has been successfully returned by {member_name}.\n")
+
+    def display_books(self):
+        if not self.books:
+            print("No books are currently available.\n")
+            return
+        print("Available books:")
+        print(", ".join(self.books) + "\n")
+
+
+def main():
+    library = Library()
+
+    menu = (
+        "Enter your choice:\n"
+        "1) Borrow a Book\n"
+        "2) Return a Book\n"
+        "3) Display all the available books\n"
+        "4) Quit\n"
+    )
+
+    while True:
+        choice = input(menu)
+
+        if choice == "1":
+            member_name = input("Enter your name: ")
+            book_name = input("Enter the name of the book you're borrowing: ")
+            library.borrow_book(member_name, book_name)
+
+        elif choice == "2":
+            member_name = input("Enter your name: ")
+            book_name = input("Enter the name of the book you're returning: ")
+            library.return_book(member_name, book_name)
+
+        elif choice == "3":
+            library.display_books()
+
+        elif choice == "4":
+            print("Goodbye!")
+            break
+
+        else:
+            print("Invalid choice, please try again.\n")
+
+
+if __name__ == "__main__":
+    main()
