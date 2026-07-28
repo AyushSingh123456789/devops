@@ -1,12 +1,3 @@
-class Members:
-    def __init__(self, member_name, book_name):
-        self.member_name = member_name
-        self.book_name = book_name
-
-
-# class Library:
-#     def __init__(self):
-#         book = Members(member_name, book_name)
       
 class Books():
     
