@@ -1,0 +1,22 @@
+-> Import name: import psycopg (not psycopg2).
+-> The with connect() as conn: block closes the connection. This is the big one. In psycopg2, with conn: only manages the transaction (commit on success, rollback on error) — the connection itself stays open afterward and you must call conn.close() yourself. In psycopg3, exiting the with block also closes the connection. If you're porting old psycopg2 code that relies on the connection staying open after a with block, it'll break.
+-> Cursors still work the same way — with conn.cursor() as cur: cur.execute(...) — and %s placeholders for parameters are unchanged.
+-> Dict-like rows: psycopg2 needs cursor_factory=RealDictCursor. psycopg3 uses row_factory:
+
+from psycopg.rows import dict_row
+conn = psycopg.connect(..., row_factory=dict_row)
+
+
+
+-> Autocommit default is still False in both, so no change there.
+-> psycopg3 adds native async support (psycopg.AsyncConnection) and pipeline mode, which psycopg2 doesn't have — not a compatibility issue, just new capability if you want it later.
+
+
+
+BACKEND PROGRESS IN THIS LEARNING-:
+
+Here is exactly how what you are doing fits into the backend world:
+1. Database Connectivity (CRUD)Every app you use (Instagram, Netflix, Amazon) needs to talk to a database. Your create, insert, and update functions are called CRUD operations (Create, Read, Update, Delete). You are writing the exact engine that moves data between a user and a database.
+2. Security Best PracticesMoving your passwords to a .env file is a fundamental backend security rule. Junior backend developers get rejected in interviews if they hardcode credentials. You are learning production-level security habits right from the start.
+3. Drivers and GatewaysYou are using psycopg to bridge the gap between Python (the programming language) and PostgreSQL (the relational database). In backend dev, this is known as using a database driver or working with a Data Access Layer.
+What Comes Next?Right now, your script interacts with the terminal (input()). In a complete backend system, you will replace those input() lines with an API framework like FastAPI, Flask, or Django.Instead of a user typing in the terminal, a frontend web page or mobile app will send data over the internet, and your backend script will catch it and run these exact SQL queries.
