@@ -1,0 +1,49 @@
+Ques1: Can you tell me how the second function is getting the knowledge of the tables if I am not providing any details to it, the details are only inside the first method, inside try block?
+
+Tables Live in the Database, Not Python:
+When you run create_tables() even once, the PostgreSQL database server executes the SQL command:
+CREATE TABLE IF NOT EXISTS vehicles (...)
+The database creates that table on its disk inside the database specified in your .env (DB_NAME).
+
+Persistence Beyond Python execution:
+Once created, the vehicles table remains inside the database indefinitely (until explicitly deleted with a DROP TABLE command or by deleting the database).
+
+read_tables() Queries the Database Directly:
+When read_tables() runs:
+
+It connects to the database using get_db_connection().
+
+It sends a SQL query: SELECT * FROM vehicles WHERE ...
+
+PostgreSQL checks its own schema, sees that a table named vehicles exists, executes the query, and returns the result to Python.
+
+Key Takeaway
+Python function variables (like vehicle_data or owner_name) are isolated in Python's memory, but database tables are persistent objects on the PostgreSQL server.
+
+As long as create_tables() was executed at least once in the past on that database, read_tables() will find the vehicles table without needing any code or variables passed from create_tables()
+
+Ques2: Why does a postgresql table creates id = 4 for the new entry in a table instead of id = 3, if previously id = 3 was deleted?
+
+
+PostgreSQL assigns id = 4 instead of reusing id = 3 because auto-incrementing columns (like SERIAL or IDENTITY) rely on an independent database object called a Sequence.
+
+How Sequences Work:
+
+State Isolation: Sequences operate outside ordinary transaction logic. They only move forward and have no memory of what happens inside your tables.
+No Database Scanning: When you insert a new row, PostgreSQL calls nextval() on the sequence to get the next number. It does not scan the table to see if 3 is missing; it simply increments its internal counter from 3 to 4.
+
+Why This is Beneficial:
+
+High Performance: Scanning the table for missing or "gap" numbers on every single insert would drastically slow down your database.
+Concurrency: If multiple users insert data simultaneously, the sequence doles out unique numbers instantly without forcing transactions to wait for one another.
+Data Integrity: Reusing deleted IDs can break historical records or data relationships if another table still references the old id = 3.
+
+How to Force a Reset (If Needed):
+
+If you are doing local development or cleaning a test database and absolutely need the sequence to align with your table data, you can reset it manually:
+
+To reset to the highest existing ID:
+SELECT setval(pg_get_serial_sequence('your_table_name', 'id'), COALESCE(max(id), 0) + 1, false);
+
+To completely wipe a table and start back at 1:
+TRUNCATE TABLE your_table_name RESTART IDENTITY;
