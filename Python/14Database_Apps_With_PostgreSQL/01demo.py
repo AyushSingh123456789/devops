@@ -31,6 +31,14 @@ def insert_data():
         with conn.cursor() as cur:
             cur.execute("insert into students(name,address,age,number) values (%s,%s,%s,%s)",(name,address,age,number))
             print("data added in students table")
+            
+def read_data():
+    student_id = input("Enter the id of the student you wanna view the table of: ")
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("select * from students where student_id=%s", (student_id,)) #print(cur.fetchall())
+            student = cur.fetchone()
+            print(student)
 
 def delete_data():
     student_id = input("Enter the id of the student you want to delete: ")
@@ -84,7 +92,8 @@ def update_data():
 # create_table()               
 #insert_data()
 #update_data() 
-delete_data()
+#delete_data()
+read_data()
 
 
 # Imp Note: Many of the () used inside this program are actually tuples.      
