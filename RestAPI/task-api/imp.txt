@@ -1,0 +1,51 @@
+Inside test_api.py :
+
+# import requests
+Imports Python's built-in third-party requests library
+Your FastAPI server needs something to send HTTP requests to it. requests acts as an HTTP client (like a programmatic web browser or Postman inside Python)
+
+# BASE_URL = "http://127.0.0.1:8000"
+Defines a constant string containing the base address where your FastAPI application is running locally.
+Instead of retyping "[http://127.0.0.1:8000](http://127.0.0.1:8000)" in every function call, you store it in a variable. If your port or host changes later (e.g., deploying to a server), you only need to change it in this one spot.
+
+# response = requests.get(f"{BASE_URL}/users")
+f"{BASE_URL}/users": Constructs the full target endpoint URL: [http://127.0.0.1:8000/users](http://127.0.0.1:8000/users)
+requests.get(...): Sends an HTTP GET request to your FastAPI @app.get("/users") endpoint.
+response = ...: Captures the HTTP response object sent back by FastAPI (which includes the status code, headers, and body).
+
+# print("All Users:", response.json())
+response.json(): Takes the raw JSON text body returned by FastAPI and automatically converts it into Python native data types (in this case, a list of dict items).
+print(...): Displays the parsed output in your terminal screen.
+
+#
+new_user = {
+    "name": "Alice Doe",
+    "email": "alice@example.com",
+    "age": 28,
+    "is_verified": True
+}
+Creates a standard Python dictionary representing a user.
+It matches the exact keys (name, email, age, is_verified) defined in your FastAPI server's UserCreate Pydantic model.
+
+# post_response = requests.post(f"{BASE_URL}/users", json=new_user)
+requests.post(...): Sends an HTTP POST request to your @app.post("/users") endpoint.
+json=new_user: This parameter automatically:
+Serializes the new_user Python dictionary into a JSON string.
+Adds the HTTP header Content-Type: application/json so FastAPI knows how to parse the incoming body.
+
+#print("Create User Response:", post_response.json())
+Parses the server's response ({"message": "User created successfully"}) into a dictionary and prints it to the terminal.
+
+# user_response = requests.get(f"{BASE_URL}/users/1")
+Sends a GET request to [http://127.0.0.1:8000/users/1](http://127.0.0.1:8000/users/1).
+FastAPI extracts 1 from the URL path parameter and passes it as user_id=1 into your @app.get("/users/{user_id}") function.
+
+# print("User 1:", user_response.json())
+Converts the JSON response for user ID 1 into Python data and prints it out.
+
+
+
+Important note:
+When you run test_api.py while your server (app.py) is running, you are performing End-to-End Integration Testing.
+You are testing the entire journey of a request:
+test_api.py -> Network -> FastAPI (Routing & Pydantic Validation) -> PostgreSQL (Database) -> FastAPI -> test_api.py

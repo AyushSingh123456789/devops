@@ -59,6 +59,7 @@ def get_user_by_id(user_id: int):
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM users WHERE id=%s", (user_id,))
-            user = cur.fetchall()
-        conn.commit()
-    return user
+            user = cur.fetchone() # returns a single dictionary instead of list
+        if not user:
+            return {"error": "user not found"}
+        return user
