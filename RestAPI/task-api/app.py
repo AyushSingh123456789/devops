@@ -28,7 +28,7 @@ class UserCreate(BaseModel):
     is_verified: bool = False
     
 # Get all users(GET request)
-@app.get("/users")
+@app.get("/users") # app decorator for our root dir'/users'
 def get_users():
     with get_db_connection() as conn:
         with conn.cursor() as cur:
