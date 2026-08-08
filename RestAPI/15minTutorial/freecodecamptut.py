@@ -35,7 +35,7 @@ def get_student(student_id: int):
     return students[student_id]
 
 @app.get("/get-by-name/{student_id}")
-def get_student(*, student_id: int, name: Optional[str] = None, test: Optional[int] = None):
+def get_student(*, student_id: int, name: Optional[str] = None):
     for student_id in students:
         if students[student_id]["name"] == name:
             return students[student_id]
@@ -45,7 +45,7 @@ def get_student(*, student_id: int, name: Optional[str] = None, test: Optional[i
 def create_student(student_id: int, student: Student):
     if student_id in students:
         return {"error": "student already exists"}
-    students[student_id] = student
+    students[student_id] = student.model_dump() # or .dict() in Pydantic v1
     return students[student_id]
 
 @app.put("/update-student/{student_id}")
